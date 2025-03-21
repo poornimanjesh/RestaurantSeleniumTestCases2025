@@ -2,14 +2,13 @@ using Conferma.API.Framework;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SpecFlowBasics.Models;
-using System;
 using System.Net;
 using TechTalk.SpecFlow;
 
 namespace SpecFlowBasics.StepDefinitions
 {
     [Binding]
-    public class CalculateTotalBillForCancelOrderStepDefinitions
+    public class CalculateTotalBillForCancelOrderStepDefinitions:BaseDefenition
     {
 
         private List<OrderItem> _orderItems;
@@ -19,7 +18,7 @@ namespace SpecFlowBasics.StepDefinitions
         private List<BillCalculation> _billCalculations;
         private readonly FeatureContext _featureContext;
         private List<ExpectedResult> _expectedResults;
-
+        //public string baseUrl = "http://localhost:5049/api/";
         public CalculateTotalBillForCancelOrderStepDefinitions(FeatureContext featureContext)
         {
             _featureContext = featureContext;
@@ -46,8 +45,8 @@ namespace SpecFlowBasics.StepDefinitions
                 order.MenuItems.Add(new MenuItem() { IsUpdate = false, Name = item, Price = price, Quantity = quantity });
             }
             order.OrderTime = orderedTime;
-            string baseUrl = "http://localhost:5049/api/";
-            var client = helper.SetUrl(baseUrl, "Restaurent");
+            
+            var client = helper.SetUrl(baseUrl, "Restaurant");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
             orders.OrderList.Add(order);
@@ -79,9 +78,9 @@ namespace SpecFlowBasics.StepDefinitions
 
             }
             order.IsUpdate = true;
-            string baseUrl = "http://localhost:5049/api/";
+            //string baseUrl = "http://localhost:5049/api/";
             //var id = 
-            var client = helper.SetUrl(baseUrl, "Restaurent/3");
+            var client = helper.SetUrl(baseUrl, "Restaurant/3");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
             orders.OrderList.Add(order);

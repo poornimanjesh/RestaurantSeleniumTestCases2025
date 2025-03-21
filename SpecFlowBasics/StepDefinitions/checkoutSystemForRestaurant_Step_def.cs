@@ -1,24 +1,24 @@
 ﻿using Conferma.API.Framework;
-using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SpecFlowBasics.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
 namespace SpecFlowBasics.StepDefinitions
 {
+    public class BaseDefenition
+    {
+        public string baseUrl = "http://localhost:5049/api/";
+    }
+
     [Binding]
-    public class checkoutSystemForRestaurant_Step_def
+    public class checkoutSystemForRestaurant_Step_def: BaseDefenition
     {
         Order order;
         decimal total;
         Helper helper;
+       // private string baseUrl = "http://localhost:5049/api/";
 
         public checkoutSystemForRestaurant_Step_def()
         {
@@ -29,8 +29,7 @@ namespace SpecFlowBasics.StepDefinitions
         public void GivenAsARestaurantOwnerIKnowTheCostForAnd(Decimal starterPrice, Decimal mainPrice, Decimal drinksPrice)
         {
           
-
-        }
+                    }
 
         [When(@"group of people  orders (.*), starters (.*) ,mains (.*), and drinks (.*)")]
         public void WhenGroupOfPeopleOrdersStartersMainsAndDrinks(string ordertime, int startercount, int mainCount, int drinkscount)
@@ -68,8 +67,7 @@ namespace SpecFlowBasics.StepDefinitions
         [Then(@"the total bill should include the cost of starters, mains, and drinks along with <serviceCharge>")]
         public void ThenTheTotalBillShouldIncludeTheCostOfStartersMainsAndDrinksAlongWithServiceCharge()
         {
-            string baseUrl = "http://localhost:5049/api/";
-            var client = helper.SetUrl(baseUrl, "Restaurent");
+            var client = helper.SetUrl(baseUrl, "Restaurant");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
             orders.OrderList.Add(order);
@@ -78,8 +76,7 @@ namespace SpecFlowBasics.StepDefinitions
             var response = helper.GetResponseAsync(client, request).Result;
             total = Convert.ToDecimal(response.Content);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-
-            //var total = Restaurant.CalculateTotal(order);
+            Assert.That(response.ContentType, Is.EqualTo("application/json"));
         }
 
         [Then(@"I assert the <actualAmount> with (.*)")]

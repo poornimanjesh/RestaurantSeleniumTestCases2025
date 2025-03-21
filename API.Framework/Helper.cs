@@ -18,6 +18,7 @@ namespace Conferma.API.Framework
 
         public RestClient SetUrl(string baseUrl, string endpoint)
         {
+            //for future use
             var url = Path.Combine(baseUrl, endpoint);
             client = new RestClient(url);
             //client.ClientCertificates = new X509CertificateCollection() { certificate };

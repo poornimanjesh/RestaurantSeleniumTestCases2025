@@ -1,20 +1,12 @@
 ﻿using SpecFlowBasics.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TechTalk.SpecFlow;
-using SpecFlowBasics.Models;
-using TechTalk.SpecFlow.Assist;
 using Conferma.API.Framework;
 using Newtonsoft.Json;
-using System.Diagnostics;
 
 namespace SpecFlowBasics.StepDefinitions
 {
     [Binding]
-    public class GenarateBillBasedOnTime
+    public class GenarateBillBasedOnTime: BaseDefenition
     {
 
       private List<OrderItem> _orderItems;
@@ -29,6 +21,7 @@ namespace SpecFlowBasics.StepDefinitions
             _featureContext = featureContext;
             helper = new Helper();
         }
+
         [Given(@"a First group  people orders before seven pm  following:")]
         public void GivenAFirstGroupPeopleOrdersBeforeSevenPmFollowing(Table table)
         {
@@ -50,8 +43,8 @@ namespace SpecFlowBasics.StepDefinitions
                 order.MenuItems.Add(new MenuItem() { IsUpdate = false, Name = item, Price = price, Quantity = quantity });
             }
 
-            string baseUrl = "http://localhost:5049/api/";
-            var client = helper.SetUrl(baseUrl, "Restaurent");
+           // string baseUrl = "http://localhost:5049/api/";
+            var client = helper.SetUrl(baseUrl, "Restaurant");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
             orders.OrderList.Add(order);
@@ -62,8 +55,6 @@ namespace SpecFlowBasics.StepDefinitions
             _featureContext["temptotal"] = total;
 
         }
-
-
 
 
         [Given(@"a Second group people orders after  seven pm the following:")]
@@ -85,9 +76,8 @@ namespace SpecFlowBasics.StepDefinitions
                 order.MenuItems.Add(new MenuItem() { IsUpdate = false, Name = item, Price = price, Quantity = quantity });
 
             }
-            string baseUrl = "http://localhost:5049/api/";
-            //var id = 
-            var client = helper.SetUrl(baseUrl, "Restaurent/2");
+           // string baseUrl = "http://localhost:5049/api/";
+            var client = helper.SetUrl(baseUrl, "Restaurant/2");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
             orders.OrderList.Add(order);
@@ -97,8 +87,6 @@ namespace SpecFlowBasics.StepDefinitions
             decimal total2 = Convert.ToDecimal(response.Content);
             _featureContext["temptotal2"] = total2;
         }
-
-
 
         [When(@"I get the subtotal bill for  first and second group")]
         public void WhenIGetTheSubtotalBillForFirstAndSecondGroup()
@@ -141,14 +129,5 @@ namespace SpecFlowBasics.StepDefinitions
                 Console.WriteLine($"Assertion failed: Expected {expectedTotal}, but got {actualTotal}.");
             }
         }
-
-
-
-
-
-
-
-
-
     }
 }

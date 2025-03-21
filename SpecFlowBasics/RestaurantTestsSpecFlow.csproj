@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.18.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="SpecFlow.Assist.Dynamic" Version="1.4.2" />
     <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
@@ -19,6 +21,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API.Framework\API.Framework.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Support\" />
   </ItemGroup>
 
 </Project>
