@@ -2,6 +2,7 @@
 using TechTalk.SpecFlow;
 using Conferma.API.Framework;
 using Newtonsoft.Json;
+using NUnit.Framework;
 
 namespace SpecFlowBasics.StepDefinitions
 {
@@ -25,7 +26,7 @@ namespace SpecFlowBasics.StepDefinitions
         [Given(@"a First group  people orders before seven pm  following:")]
         public void GivenAFirstGroupPeopleOrdersBeforeSevenPmFollowing(Table table)
         {
-
+            DateTime orderedTime = DateTime.Now;
             order = new Order();
             order.ServiceCharge = 10;
             order.Number = 2;
@@ -37,13 +38,14 @@ namespace SpecFlowBasics.StepDefinitions
                 var item = row["Item"];
                 var quantity = int.Parse(row["Quantity"]);
                 var price = decimal.Parse(row["Price"]);
-                var orderedTime = DateTime.Parse(row["orderedTime"]);
+                orderedTime = DateTime.Parse(row["orderedTime"]);
 
                 _orderItems.Add(new OrderItem(item, quantity, price, orderedTime));
                 order.MenuItems.Add(new MenuItem() { IsUpdate = false, Name = item, Price = price, Quantity = quantity });
             }
 
-           // string baseUrl = "http://localhost:5049/api/";
+            order.OrderTime = orderedTime;
+
             var client = helper.SetUrl(baseUrl, "Restaurant");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
@@ -52,7 +54,7 @@ namespace SpecFlowBasics.StepDefinitions
             var request = helper.CreatePostRequest(orders);
             var response = helper.GetResponseAsync(client, request).Result;
             total = Convert.ToDecimal(response.Content);
-            _featureContext["temptotal"] = total;
+            _featureContext["temptotal1"] = total;
 
         }
 
@@ -64,19 +66,21 @@ namespace SpecFlowBasics.StepDefinitions
             order.ServiceCharge = 10;
             order.MenuItems = new List<MenuItem>();
             _orderItems = new List<OrderItem>();
-
+            DateTime orderedTime = DateTime.Now;
             foreach (var row in table2.Rows)
             {
                 var item = row["Item"];
                 var quantity = int.Parse(row["Quantity"]);
                 var price = decimal.Parse(row["Price"]);
-                var orderedTime = DateTime.Parse(row["orderedTime"]);
+                orderedTime = DateTime.Parse(row["orderedTime"]);
 
                 _orderItems.Add(new OrderItem(item, quantity, price, orderedTime));
                 order.MenuItems.Add(new MenuItem() { IsUpdate = false, Name = item, Price = price, Quantity = quantity });
 
             }
-           // string baseUrl = "http://localhost:5049/api/";
+            order.OrderTime = orderedTime;
+            order.IsUpdate = true;
+
             var client = helper.SetUrl(baseUrl, "Restaurant/2");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
@@ -109,16 +113,10 @@ namespace SpecFlowBasics.StepDefinitions
                 _expectedResults.Add(new ExpectedResult(expectedResult));
             }
 
-            //  Print the expected results for verification
-            foreach (var expectedResult in _expectedResults)
-            {
-                Console.WriteLine(expectedResult.ToString());
-            }
-
-            // Example assertion (replace with your actual assertion logic)
-            var actualTotal = 44.55m; // Replace this with your actual total calculation
-            actualTotal = Convert.ToDecimal(_featureContext["temptotal2"]) + Convert.ToDecimal(_featureContext["temptotal2"]);
+            decimal actualTotal = Convert.ToDecimal(_featureContext["temptotal1"]) + Convert.ToDecimal(_featureContext["temptotal2"]);
             var expectedTotal = _expectedResults[0].ExpectedResults; // Assuming only one row in the table
+            
+            Assert.AreEqual(actualTotal, expectedTotal);
 
             if (actualTotal == expectedTotal)
             {

@@ -7,10 +7,6 @@ using TechTalk.SpecFlow;
 
 namespace SpecFlowBasics.StepDefinitions
 {
-    public class BaseDefenition
-    {
-        public string baseUrl = "http://localhost:5049/api/";
-    }
 
     [Binding]
     public class checkoutSystemForRestaurantStepDefinitions: BaseDefenition
@@ -18,7 +14,6 @@ namespace SpecFlowBasics.StepDefinitions
         Order order;
         decimal total;
         Helper helper;
-       // private string baseUrl = "http://localhost:5049/api/";
 
         public checkoutSystemForRestaurantStepDefinitions()
         {
@@ -28,8 +23,8 @@ namespace SpecFlowBasics.StepDefinitions
         [Given(@"as a restaurant owner I know the cost for (.*), (.*), and (.*)")]
         public void GivenAsARestaurantOwnerIKnowTheCostForAnd(Decimal starterPrice, Decimal mainPrice, Decimal drinksPrice)
         {
-          
-                    }
+
+        }
 
         [When(@"group of people  orders (.*), starters (.*) ,mains (.*), and drinks (.*)")]
         public void WhenGroupOfPeopleOrdersStartersMainsAndDrinks(string ordertime, int startercount, int mainCount, int drinkscount)
@@ -62,8 +57,6 @@ namespace SpecFlowBasics.StepDefinitions
            
         }
 
-
-
         [Then(@"the total bill should include the cost of starters, mains, and drinks along with <serviceCharge>")]
         public void ThenTheTotalBillShouldIncludeTheCostOfStartersMainsAndDrinksAlongWithServiceCharge()
         {
@@ -82,13 +75,8 @@ namespace SpecFlowBasics.StepDefinitions
         [Then(@"I assert the <actualAmount> with (.*)")]
         public void ThenIAssertTheActualAmountWith(Decimal expectedresult)
         {
-           // var total = Restaurant.CalculateTotal(order);
             Assert.AreEqual(expectedresult, total);
-
         }
-
-
-
 
     }
 }

@@ -112,9 +112,6 @@ namespace SpecFlowBasics.StepDefinitions
                 Console.WriteLine(expectedResult.ToString());
             }
 
-            // Example assertion (replace with your actual assertion logic)
-            //var actualTotal = 44.55m; // Replace this with your actual total calculation
-            //actualTotal = Convert.ToDecimal(_featureContext["temptotal4"]) + Convert.ToDecimal(_featureContext["temptotal2"]);
             var expectedTotal = _expectedResults[0].ExpectedResults; // Assuming only one row in the table
 
             decimal actualTotal = Convert.ToDecimal(_featureContext["temptotal3"]);
@@ -147,20 +144,13 @@ namespace SpecFlowBasics.StepDefinitions
 
                 _expectedResults.Add(new ExpectedResult(expectedResult));
             }
-
-            //  Print the expected results for verification
-            foreach (var expectedResult in _expectedResults)
-            {
-                Console.WriteLine(expectedResult.ToString());
-            }
-
-            // Example assertion (replace with your actual assertion logic)
-            //var actualTotal = 44.55m; // Replace this with your actual total calculation
-            //actualTotal = Convert.ToDecimal(_featureContext["temptotal8"]) + Convert.ToDecimal(_featureContext["temptotal2"]);
+           
             var expectedTotal = _expectedResults[0].ExpectedResults; // Assuming only one row in the table
 
             decimal actualTotal = Convert.ToDecimal(_featureContext["temptotal4"]);
+
             Assert.AreEqual(actualTotal, expectedTotal);
+
             if (actualTotal == expectedTotal)
             {
                 Console.WriteLine("Assertion passed: Expected total matches actual total.");
