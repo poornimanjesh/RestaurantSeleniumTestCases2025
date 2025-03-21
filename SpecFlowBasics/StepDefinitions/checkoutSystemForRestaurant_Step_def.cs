@@ -48,8 +48,12 @@ namespace SpecFlowBasics.StepDefinitions
         [When(@"I check the (.*) and apply discount on drinks if ordered within the discount time else discount won't apply")]
         public void WhenICheckTheAndApplyDiscountOnDrinksIfOrderedWithinTheDiscountTimeElseDiscountWontApply(string orderTime)
         {
-            var ordertime = Convert.ToDateTime(orderTime);
-            bool isDiscountEligible = Restaurant.IsOrderEligebleForDiscount(ordertime);
+            DateTime ordertimedt = Convert.ToDateTime(orderTime);
+            bool isDiscountEligible = Restaurant.IsOrderEligebleForDiscount(ordertimedt);
+            if (ordertimedt.Hour < 19)
+                Assert.IsTrue(isDiscountEligible);
+            else
+                Assert.IsFalse(isDiscountEligible);
         }
 
 
@@ -73,6 +77,8 @@ namespace SpecFlowBasics.StepDefinitions
             var request = helper.CreatePostRequest(orders);
             var response = helper.GetResponseAsync(client, request).Result;
             total = Convert.ToDecimal(response.Content);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
             //var total = Restaurant.CalculateTotal(order);
         }
 

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using SpecFlowBasics.Models;
 using System;
+using System.Net;
 using TechTalk.SpecFlow;
 
 namespace SpecFlowBasics.StepDefinitions
@@ -89,6 +90,8 @@ namespace SpecFlowBasics.StepDefinitions
             var response = helper.GetResponseAsync(client, request).Result;
             decimal total2 = Convert.ToDecimal(response.Content);
             _featureContext["temptotal4"] = total2;
+
+            Assert.AreEqual( HttpStatusCode.OK , response.StatusCode);
         }
 
 
