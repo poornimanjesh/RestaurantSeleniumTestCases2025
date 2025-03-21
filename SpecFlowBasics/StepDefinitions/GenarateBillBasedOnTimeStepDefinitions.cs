@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace SpecFlowBasics.StepDefinitions
 {
     [Binding]
-    public class GenarateBillBasedOnTime: BaseDefenition
+    public class GenarateBillBasedOnTimeStepDefinitions: BaseDefenition
     {
 
       private List<OrderItem> _orderItems;
@@ -16,7 +16,7 @@ namespace SpecFlowBasics.StepDefinitions
         private List<BillCalculation> _billCalculations;
         private readonly FeatureContext _featureContext;
 
-        public GenarateBillBasedOnTime(FeatureContext featureContext)
+        public GenarateBillBasedOnTimeStepDefinitions(FeatureContext featureContext)
         {
             _featureContext = featureContext;
             helper = new Helper();

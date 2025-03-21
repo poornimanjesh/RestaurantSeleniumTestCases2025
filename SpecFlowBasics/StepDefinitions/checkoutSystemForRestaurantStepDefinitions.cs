@@ -13,14 +13,14 @@ namespace SpecFlowBasics.StepDefinitions
     }
 
     [Binding]
-    public class checkoutSystemForRestaurant_Step_def: BaseDefenition
+    public class checkoutSystemForRestaurantStepDefinitions: BaseDefenition
     {
         Order order;
         decimal total;
         Helper helper;
        // private string baseUrl = "http://localhost:5049/api/";
 
-        public checkoutSystemForRestaurant_Step_def()
+        public checkoutSystemForRestaurantStepDefinitions()
         {
             helper  = new Helper();
         }
