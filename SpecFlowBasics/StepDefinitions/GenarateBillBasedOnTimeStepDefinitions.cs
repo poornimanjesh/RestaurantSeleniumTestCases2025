@@ -3,6 +3,7 @@ using TechTalk.SpecFlow;
 using Conferma.API.Framework;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using RestaurantTestsSpecFlow.Support;
 
 namespace SpecFlowBasics.StepDefinitions
 {
@@ -31,26 +32,12 @@ namespace SpecFlowBasics.StepDefinitions
             order.ServiceCharge = 10;
             order.Number = 2;
             order.MenuItems = new List<MenuItem>();
-            _orderItems = new List<OrderItem>();
-
-            foreach (var row in table.Rows)
-            {
-                var item = row["Item"];
-                var quantity = int.Parse(row["Quantity"]);
-                var price = decimal.Parse(row["Price"]);
-                orderedTime = DateTime.Parse(row["orderedTime"]);
-
-                _orderItems.Add(new OrderItem(item, quantity, price, orderedTime));
-                order.MenuItems.Add(new MenuItem() { IsUpdate = false, Name = item, Price = price, Quantity = quantity });
-            }
-
-            order.OrderTime = orderedTime;
-
+            UtilityClass.UpdateOrder(table, order);    
             var client = helper.SetUrl(baseUrl, "Restaurant");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
             orders.OrderList.Add(order);
-            var json = JsonConvert.SerializeObject(orders);
+            //var json = JsonConvert.SerializeObject(orders);//debugging
             var request = helper.CreatePostRequest(orders);
             var response = helper.GetResponseAsync(client, request).Result;
             total = Convert.ToDecimal(response.Content);
@@ -60,32 +47,20 @@ namespace SpecFlowBasics.StepDefinitions
 
 
         [Given(@"a Second group people orders after  seven pm the following:")]
-        public void GivenASecondGroupPeopleOrdersAfterSevenPmTheFollowing(Table table2)
+        public void GivenASecondGroupPeopleOrdersAfterSevenPmTheFollowing(Table table)
         {
             order = new Order();
             order.ServiceCharge = 10;
             order.MenuItems = new List<MenuItem>();
-            _orderItems = new List<OrderItem>();
-            DateTime orderedTime = DateTime.Now;
-            foreach (var row in table2.Rows)
-            {
-                var item = row["Item"];
-                var quantity = int.Parse(row["Quantity"]);
-                var price = decimal.Parse(row["Price"]);
-                orderedTime = DateTime.Parse(row["orderedTime"]);
-
-                _orderItems.Add(new OrderItem(item, quantity, price, orderedTime));
-                order.MenuItems.Add(new MenuItem() { IsUpdate = false, Name = item, Price = price, Quantity = quantity });
-
-            }
-            order.OrderTime = orderedTime;
+            
+            UtilityClass.UpdateOrder(table, order);
             order.IsUpdate = true;
 
             var client = helper.SetUrl(baseUrl, "Restaurant/2");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
             orders.OrderList.Add(order);
-           // var json = JsonConvert.SerializeObject(orders);
+           // var json = JsonConvert.SerializeObject(orders);//debugging
             var request = helper.CreatePutRequest(order);
             var response = helper.GetResponseAsync(client, request).Result;
             decimal total2 = Convert.ToDecimal(response.Content);

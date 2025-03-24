@@ -1,6 +1,7 @@
 using Conferma.API.Framework;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using RestaurantTestsSpecFlow.Support;
 using SpecFlowBasics.Models;
 using System.Net;
 using TechTalk.SpecFlow;
@@ -26,26 +27,13 @@ namespace SpecFlowBasics.StepDefinitions
         }
 
         [Given(@"Four people  group orders the following:")]
-        public void GivenFourPeopleGroupOrdersTheFollowing(Table table5)
+        public void GivenFourPeopleGroupOrdersTheFollowing(Table table)
         {
             order = new Order();
             order.ServiceCharge = 10;
             order.Number = 3;
             order.MenuItems = new List<MenuItem>();
-            _orderItems = new List<OrderItem>();
-            DateTime orderedTime = DateTime.Now;
-            foreach (var row in table5.Rows)
-            {
-                var item = row["Item"];
-                var quantity = int.Parse(row["Quantity"]);
-                var price = decimal.Parse(row["Price"]);
-                orderedTime = DateTime.Parse(row["orderedTime"]);
-
-                _orderItems.Add(new OrderItem(item, quantity, price, orderedTime));
-                order.MenuItems.Add(new MenuItem() { IsUpdate = false, Name = item, Price = price, Quantity = quantity });
-            }
-            order.OrderTime = orderedTime;
-            
+            UtilityClass.UpdateOrder(table, order);
             var client = helper.SetUrl(baseUrl, "Restaurant");
             var orders = new Orders();
             orders.OrderList = new List<Order>();
@@ -58,25 +46,16 @@ namespace SpecFlowBasics.StepDefinitions
 
         }
 
+
         [Given(@"one member of the group cancels their order:")]
         public void GivenOneMemberOfTheGroupCancelsTheirOrder(Table table)
         {
             order = new Order();
             order.ServiceCharge = 10;
             order.MenuItems = new List<MenuItem>();
-            _orderItems = new List<OrderItem>();
+            
+            UtilityClass.UpdateOrder(table,order);
 
-            foreach (var row in table.Rows)
-            {
-                var item = row["Item"];
-                var quantity = int.Parse(row["Quantity"]);
-                var price = decimal.Parse(row["Price"]);
-                var orderedTime = DateTime.Parse(row["orderedTime"]);
-                order.OrderTime = orderedTime;
-                _orderItems.Add(new OrderItem(item, quantity, price, orderedTime));
-                order.MenuItems.Add(new MenuItem() { IsUpdate = false, Name = item, Price = price, Quantity = quantity });
-
-            }
             order.IsUpdate = true;
             //string baseUrl = "http://localhost:5049/api/";
             //var id = 
@@ -105,12 +84,7 @@ namespace SpecFlowBasics.StepDefinitions
 
                 _expectedResults.Add(new ExpectedResult(expectedResult));
             }
-
-            //  Print the expected results for verification
-            foreach (var expectedResult in _expectedResults)
-            {
-                Console.WriteLine(expectedResult.ToString());
-            }
+                      
 
             var expectedTotal = _expectedResults[0].ExpectedResults; // Assuming only one row in the table
 
@@ -126,11 +100,6 @@ namespace SpecFlowBasics.StepDefinitions
                 Console.WriteLine($"Assertion failed: Expected {expectedTotal}, but got {actualTotal}.");
             }
         }
-
-
-
-
-
 
 
         [Then(@"the final total bill should be deducted as follows:")]
